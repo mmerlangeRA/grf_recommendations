@@ -4,6 +4,13 @@ from lightfm import LightFM
 from lightfm.data import Dataset
 import multiprocessing
 
+'''
+In this example, we will focus on the smartlink to recommend. Top 5
+'''
+
+smartlink_prefix = 'https://grf.argoflow.io/fh4018-pdf.sl?sl='
+number_of_recommendations = 5
+
 # Function to load data from URL
 @st.cache_data
 def load_data(url):
@@ -27,7 +34,7 @@ def load_data(url):
     df_grouped = df_cleaned.groupby(['smartlink_id', 'visitor'])['view_seconds'].sum().reset_index()
     #csv = df_grouped.to_csv("small2.csv",index=False)
     df_grouped['rating']= df_grouped['view_seconds']/1800*5
-    csv = df_grouped.to_csv("small2.csv",index=False)
+    #csv = df_grouped.to_csv("small2.csv",index=False)
     return df_grouped
 
 # Function to build the recommendation system
@@ -57,11 +64,12 @@ def make_recommendations(_model, dataset, visitor):
     # Predict scores for all items
     scores = _model.predict(visitor_index, list(range(n_items)))
     # Get top item indices
-    top_items_indices = scores.argsort()[-5:][::-1]
+    top_items_indices = scores.argsort()[-number_of_recommendations:][::-1]
 
     # Map back to item ids and include scores
     item_ids = list(dataset.mapping()[2].keys())
-    recommendations = [(item_ids[x], scores[x]) for x in top_items_indices]
+    #return links liks https://grf.argoflow.io/fh4018-pdf.sl?sl=64a3e7738309e30012afd726
+    recommendations = [(smartlink_prefix + item_ids[x], scores[x]) for x in top_items_indices]
     print("make_recommendations done")
     return recommendations
 
@@ -87,8 +95,10 @@ def main():
             recommendations = make_recommendations(model, dataset, visitor)
 
             # Display recommendations
-            st.write("Recommendations for Visitor:", visitor)
-            st.write(recommendations)
+            st.write("Top recommendations for Visitor:", visitor)
+            for link, score in recommendations:
+                st.markdown(f"[{link}]({link})", unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()
