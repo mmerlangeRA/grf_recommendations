@@ -24,7 +24,10 @@ Between 0 and 5 rating is just a clamped ratio (per page)= nb_sec/6 (so above 30
 => Sum of time per page capped at 30 min ?
 => 
 
-# About install, start
+# PDF analysis
+This is a test to check what an article is and how we could detect it and maybe enhance the recommendations
+
+# Installation
 
 ## Streamlit link
 <https://grfrecommendations-skrkcd5tqmykmjawehmyr6.streamlit.app/>

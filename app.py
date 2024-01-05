@@ -75,7 +75,8 @@ def make_recommendations(_model, dataset, visitor):
 
 # Streamlit app
 def main():
-    st.title("Smartlink Recommendation System")
+    print("main loaded")
+    st.title("GRF Smartlink Recommendation System")
 
     # User inputs the URL
     url = st.text_input("Enter the URL of the dataset")
