@@ -1,26 +1,24 @@
-#No poetry :()
+# Objectives
+From reports the time spent per visitor per SL, article and page, let's recommend other articles to users
 
-# About
-This reports the time spent per visitor per SL and page
+## Vocabulary
+* SL and page => clear
+* Article : ?
 
-## drop columns
-["smartlink_name"] => drop, nothing functional in it
+
+# Quick analysis & Processing 
 
 ## Inconsistencies
 
 ### Durations
-Some inconsistencies with durations => 
 
-649d47768309e30012afd488	6	267351-702739	49695	5.0
+Some inconsistencies with durations => like 2 days
 
-649d47768309e30012afd488	6	267351-702739	49695	5.0
-
-Like 2 days ?
-
+## drop columns
+["smartlink_name"] => drop, nothing functional in it
 
 ## About ratings
 Between 0 and 5 rating is just a clamped ratio (per page)= nb_sec/6 (so above 30s =>5) 
-
 
 ### Global rating per SL ?
 => Sum of time per page capped at 30 min ?
@@ -32,11 +30,9 @@ Between 0 and 5 rating is just a clamped ratio (per page)= nb_sec/6 (so above 30
 <https://grfrecommendations-skrkcd5tqmykmjawehmyr6.streamlit.app/>
 
 ## Locally
-python3.9 venv -m venv
-
-pip install 'scikit-surprise @ git+https://github.com/mihaiblidaru/Surprise/tree/pep517_compliant_package'
+python3.9 -m venv venv
+pip install
 streamlit run app.py
-
 
 ## example data
 https://nemato-data.fr/public/output.csv
