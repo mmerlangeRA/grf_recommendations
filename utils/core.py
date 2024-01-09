@@ -8,6 +8,7 @@ import pandas as pd
 smartlink_prefix = 'https://grf.argoflow.io/fh4018-pdf.sl?sl='
 number_of_recommendations = 5
 
+# we create a dictionary that assign article details to article id 
 def get_article_detail_dictionary():
     path = 'article_ref.pkl'
     try:
@@ -30,6 +31,7 @@ def get_article_detail_dictionary():
         merged_df = pd.merge(df_details, df_fat_data, left_on='asset_name', right_on='article_name')
 
         # Create the dictionary
+        # warning : page_x is abnormal ! Should be page but I could not understand why page became page_x and page_y
         result_dict = dict(zip(merged_df['asset_name'], zip(merged_df['asset_title'],merged_df['smartlink_id'], merged_df['page_x'])))
         pickle.dump(result_dict, open(path, 'wb'))
         print("built article_detail_dictionary")
@@ -123,7 +125,7 @@ def build_recommender_article(df):
 
     return _model, _dataset
 
-# Function to make recommendations for a selected visitor
+# Function to make recommendations for a selected visitor, returns urls
 def make_recommendations(_model, dataset, visitor):
     visitor_index = dataset.mapping()[0][visitor]
     n_users, n_items = dataset.interactions_shape()
@@ -139,6 +141,7 @@ def make_recommendations(_model, dataset, visitor):
     recommendations = [(smartlink_prefix + item_ids[x], scores[x]) for x in top_items_indices]
     return recommendations
 
+# Function to make recommendations for a selected visitor, returns article ids
 def make_recommendations_article(_model, dataset, visitor):
     visitor_index = dataset.mapping()[0][visitor]
     n_users, n_items = dataset.interactions_shape()
