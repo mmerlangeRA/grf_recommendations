@@ -26,6 +26,8 @@ Between 0 and 5 rating is just a clamped ratio (per page)= nb_sec/6 (so above 30
 
 # PDF analysis
 This is a test to check what an article is and how we could detect it and maybe enhance the recommendations
+In the local pdf (real one), here are some issues :
+* 
 
 # Installation
 
@@ -34,8 +36,12 @@ This is a test to check what an article is and how we could detect it and maybe 
 
 ## Locally
 python3.9 -m venv venv
-pip install
+source venv/bin/activate
+pip install requir
 streamlit run app.py
+
+openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
+uvicorn server:app --reload
 
 ## example data
 https://nemato-data.fr/public/output.csv
