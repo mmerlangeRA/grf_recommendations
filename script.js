@@ -1,6 +1,6 @@
 
 const url = new URL(window.location.href);
-const prefixUrl = "https://3fbf-2a01-cb05-9121-e400-edbe-f9cc-3d6d-ac76.ngrok-free.app/recommendations/"
+const prefixUrl = "https://c1ce-2a01-cb05-9121-e400-edbe-f9cc-3d6d-ac76.ngrok-free.app/recommendations/"
 const visitorId= url.searchParams.get('q');
 
 const style = "top:40px;right:5px;position:fixed;background-color:white;box-shadow: 2px 2px 2px gray;border-radius: 3px;padding: 2px;border: 1px solid gray;"
@@ -18,6 +18,7 @@ async function getRecommendations(visitorId) {
         const reponse = await fetch(reco_url);
         const recommendations = await reponse.json();
         reco_array = JSON.parse(recommendations)
+        console.log(reco_array)
         return reco_array
     }catch(e) {
         console.error(e)
@@ -42,12 +43,15 @@ async function addRecoDiv(recos) {
     //ul.setAttribute("style", "list-style:none;padding:0px;margin:0px;font-size:10px;animation-duration:0.5s;")//    display: flex;flex - direction: column;
     recoDiv.setAttribute("style", "max-height: 0;transition: max-height 0.5s ease-out;overflow:hidden;")
     recoDiv.appendChild(ul)
+    const maxLength = 10
     recos.forEach(reco => {
         const li = document.createElement("li")
         const a = document.createElement("a")
-        a.href = reco
+        a.href = reco[1]+"#page="+reco[2]
         a.target = "_blank"
-        a.innerHTML = "Lien"
+        const name = reco[0].length > maxLength ? (reco[0].substring(0, maxLength) + "...") : reco[0]
+        a.innerHTML = name
+        a.setAttribute("title",reco[0])
         li.appendChild(a)
         ul.appendChild(li)
     })

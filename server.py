@@ -1,12 +1,10 @@
-from utils.core import load_model_and_dataset, save_model_and_dataset, build_recommender, make_recommendations
-import ssl
+from utils.core import get_article_details, load_model_and_dataset, make_recommendations_article, save_model_and_dataset, build_recommender, make_recommendations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 
-""" ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ssl_context.load_cert_chain('/cert.pem', keyfile='/key.pem') """
+
 app = FastAPI()
 
 app.add_middleware(
@@ -24,19 +22,17 @@ class RecoRequest(BaseModel):
     visitor_id: str
 
 
-@app.get("/hello")
+@app.get("/health")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Up and running"}
 
 @app.get("/recommendations/{visitor_id}")
 async def get_recos(visitor_id):
    try:
     df,model,dataset = load_model_and_dataset(model_name)
-    print(visitor_id)
-    recos = make_recommendations(model,dataset,visitor_id)
-    urls = [rec[0] for rec in recos]
-    json_str = json.dumps(urls)
+    recommended_article_ids = make_recommendations_article(model,dataset,visitor_id)
+    recommendations= [get_article_details(article_id) for article_id in recommended_article_ids]
+    json_str = json.dumps(recommendations)
     return json_str
    except Exception as e:
       raise HTTPException(status_code=404, detail="Visitor not found")
-
